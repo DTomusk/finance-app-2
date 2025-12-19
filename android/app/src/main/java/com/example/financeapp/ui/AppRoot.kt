@@ -1,21 +1,17 @@
 package com.example.financeapp.ui
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.rememberNavController
-import com.example.financeapp.addtransaction.AddTransactionRoute
 
 @Composable
 fun AppRoot() {
     val navController = rememberNavController()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    NavHost(
+    AppScaffold(
         navController = navController,
-        startDestination = "add"
-    ) {
-        composable("add") {
-            AddTransactionRoute()
-        }
-    }
+        snackbarHostState = snackbarHostState
+    )
 }
