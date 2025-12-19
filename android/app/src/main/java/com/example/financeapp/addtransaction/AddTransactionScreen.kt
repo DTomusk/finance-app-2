@@ -44,7 +44,7 @@ import java.util.Locale
 fun AddTransactionScreen(
     uiState: AddTransactionUiState,
     onAmountChange: (String) -> Unit = {},
-    onCategoryChange: (String) -> Unit = {},
+    onCategoryChange: (Long) -> Unit = {},
     onDateChange: (String) -> Unit = {},
     onDescriptionChange: (String) -> Unit = {},
     onSubmit: () -> Unit = {},
@@ -57,11 +57,13 @@ fun AddTransactionScreen(
     ) {
         var expanded by remember { mutableStateOf(false) }
         // inject categories
-        val categories = listOf("Treats", "Transport")
         var showDatePicker by remember { mutableStateOf(false) }
         val datePickerState = rememberDatePickerState(
             initialSelectedDateMillis = System.currentTimeMillis()
         )
+        val selectedCategoryLabel =
+            uiState.categories.firstOrNull { it.id == uiState.selectedCategoryId }?.label
+                ?: ""
 
         LaunchedEffect(datePickerState.selectedDateMillis) {
             datePickerState.selectedDateMillis?.let { millis ->
@@ -90,7 +92,7 @@ fun AddTransactionScreen(
             onExpandedChange = { expanded = !expanded }
         ) {
             OutlinedTextField(
-                value = uiState.category,
+                value = selectedCategoryLabel,
                 onValueChange = {},
                 label = { Text("Transaction type") },
                 readOnly = true,
@@ -106,11 +108,11 @@ fun AddTransactionScreen(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                categories.forEach { category ->
+                uiState.categories.forEach { category ->
                     DropdownMenuItem(
-                        text = { Text(category) },
+                        text = { Text(category.label) },
                         onClick = {
-                            onCategoryChange(category)
+                            onCategoryChange(category.id)
                             expanded = false
                         }
                     )

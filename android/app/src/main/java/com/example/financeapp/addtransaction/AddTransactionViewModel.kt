@@ -20,8 +20,8 @@ class AddTransactionViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(amount = newAmount)
     }
 
-    fun onCategoryChange(newCategory: String) {
-        _uiState.value = _uiState.value.copy(category = newCategory)
+    fun onCategoryChange(newCategoryId: Long) {
+        _uiState.value = _uiState.value.copy(selectedCategoryId = newCategoryId)
     }
 
     fun onDateChange(newDate: String) {
