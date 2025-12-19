@@ -4,17 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -27,6 +24,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +35,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,7 +45,7 @@ fun AddTransactionScreen(
     uiState: AddTransactionUiState,
     onAmountChange: (String) -> Unit = {},
     onCategoryChange: (String) -> Unit = {},
-    onDateChange: (java.time.LocalDate) -> Unit = {},
+    onDateChange: (String) -> Unit = {},
     onDescriptionChange: (String) -> Unit = {},
     onSubmit: () -> Unit = {},
 ) {
@@ -58,7 +59,22 @@ fun AddTransactionScreen(
         // inject categories
         val categories = listOf("Treats", "Transport")
         var showDatePicker by remember { mutableStateOf(false) }
-        val datePickerState = rememberDatePickerState()
+        val datePickerState = rememberDatePickerState(
+            initialSelectedDateMillis = System.currentTimeMillis()
+        )
+
+        LaunchedEffect(datePickerState.selectedDateMillis) {
+            datePickerState.selectedDateMillis?.let { millis ->
+                val selectedDate = convertMillisToDate(millis)
+                onDateChange(selectedDate) // informs ViewModel
+                showDatePicker = false     // closes the popup
+            }
+        }
+
+        Text(
+            "So what have you gone and bought now?",
+            style = MaterialTheme.typography.headlineSmall
+        )
 
         OutlinedTextField(
             value = uiState.amount,
@@ -115,7 +131,7 @@ fun AddTransactionScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = uiState.date.toString(),
+                value = uiState.date,
                 onValueChange = { },
                 label = { Text("Date of transaction") },
                 readOnly = true,
@@ -170,4 +186,9 @@ fun AddTransactionScreenPreview() {
     AddTransactionScreen(
         uiState = AddTransactionUiState()
     )
+}
+
+fun convertMillisToDate(millis: Long): String {
+    val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    return formatter.format(Date(millis))
 }

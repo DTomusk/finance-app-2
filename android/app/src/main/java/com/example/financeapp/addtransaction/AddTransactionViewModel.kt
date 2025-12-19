@@ -24,7 +24,7 @@ class AddTransactionViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(category = newCategory)
     }
 
-    fun onDateChange(newDate: java.time.LocalDate) {
+    fun onDateChange(newDate: String) {
         _uiState.value = _uiState.value.copy(date = newDate)
     }
 
