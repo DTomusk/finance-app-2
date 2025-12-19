@@ -17,6 +17,9 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -52,6 +55,7 @@ fun AddTransactionScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         var expanded by remember { mutableStateOf(false) }
+        // inject categories
         val categories = listOf("Treats", "Transport")
         var showDatePicker by remember { mutableStateOf(false) }
         val datePickerState = rememberDatePickerState()
@@ -65,24 +69,24 @@ fun AddTransactionScreen(
             enabled = !uiState.isSubmitting
         )
 
-        Box {
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = !expanded }
+        ) {
             OutlinedTextField(
                 value = uiState.category,
-                onValueChange = onCategoryChange,
-                label = { Text("Category") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                enabled = !uiState.isSubmitting,
+                onValueChange = {},
+                label = { Text("Transaction type") },
+                readOnly = true,
                 trailingIcon = {
-                    IconButton(onClick = { expanded = true }) {
-                        Icon(
-                            Icons.Default.ArrowDropDown,
-                            contentDescription = "Select Category"
-                        )
-                    }
-                }
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded)
+                },
+                modifier = Modifier
+                    .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                    .fillMaxWidth()
             )
-            DropdownMenu(
+
+            ExposedDropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
