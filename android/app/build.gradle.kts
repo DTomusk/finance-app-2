@@ -34,6 +34,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -57,6 +58,8 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.room.common.jvm)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -72,4 +75,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.3")
 
     implementation("androidx.compose.material:material-icons-extended")
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }
