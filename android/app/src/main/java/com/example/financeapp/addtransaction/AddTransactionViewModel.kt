@@ -2,19 +2,47 @@ package com.example.financeapp.addtransaction
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.financeapp.addtransaction.model.CategoryUiModel
+import com.example.financeapp.categories.domain.CategoryRepository
+import com.example.financeapp.transactions.domain.TransactionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AddTransactionViewModel @Inject constructor(
-    // reference to repository can be added here
+    private val transactionRepo: TransactionRepository,
+    private val categoryRepo: CategoryRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(AddTransactionUiState())
     val uiState: StateFlow<AddTransactionUiState> = _uiState.asStateFlow()
+
+    init {
+        observeCategories()
+    }
+
+    private fun observeCategories() {
+        viewModelScope.launch {
+            categoryRepo.observeCategories()
+                .collect { categories ->
+                    _uiState.update { state ->
+                        state.copy(
+                            categories = categories.map {
+                                CategoryUiModel(
+                                    id = it.id,
+                                    label = it.label
+                                )
+                            }
+                        )
+                    }
+                }
+        }
+    }
+
 
     fun onAmountChange(newAmount: String) {
         _uiState.value = _uiState.value.copy(amount = newAmount)

@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("org.jetbrains.kotlin.kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -32,16 +32,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
-    }
-    kotlinOptions {
-        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
     }
+    kotlin {
+        jvmToolchain(17)
+    }
+    buildToolsVersion = "36.1.0"
 }
 
 dependencies {
@@ -57,7 +58,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.compose.runtime)
-    implementation(libs.androidx.room.common.jvm)
+    implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)
@@ -68,13 +69,15 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    implementation("com.google.dagger:hilt-android:2.57")
-    kapt("com.google.dagger:hilt-android-compiler:2.57")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 
-    implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.3")
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
-    implementation("androidx.compose.material:material-icons-extended")
+    implementation(libs.androidx.compose.material.icons.extended)
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    ksp(libs.androidx.room.compiler)
 }

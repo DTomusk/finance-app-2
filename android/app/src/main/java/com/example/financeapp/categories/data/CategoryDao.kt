@@ -1,6 +1,7 @@
 package com.example.financeapp.categories.data
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
@@ -10,4 +11,7 @@ interface CategoryDao {
         SELECT * FROM categories ORDER BY label ASC
         """)
     fun observeCategories(): Flow<List<CategoryEntity>>
+
+    @Insert
+    suspend fun insertAll(categories: List<CategoryEntity>)
 }
