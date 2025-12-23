@@ -21,7 +21,6 @@ fun Transaction.toEntity(): TransactionEntity {
         .toEpochMilli()
 
     return TransactionEntity(
-        id = id,
         amount = amount,
         categoryId = categoryId,
         description = description,

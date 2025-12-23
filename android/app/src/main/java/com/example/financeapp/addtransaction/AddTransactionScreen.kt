@@ -36,6 +36,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
 
@@ -45,7 +48,7 @@ fun AddTransactionScreen(
     uiState: AddTransactionUiState,
     onAmountChange: (String) -> Unit = {},
     onCategoryChange: (Long) -> Unit = {},
-    onDateChange: (String) -> Unit = {},
+    onDateChange: (LocalDate) -> Unit = {},
     onDescriptionChange: (String) -> Unit = {},
     onSubmit: () -> Unit = {},
 ) {
@@ -56,7 +59,6 @@ fun AddTransactionScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         var expanded by remember { mutableStateOf(false) }
-        // inject categories
         var showDatePicker by remember { mutableStateOf(false) }
         val datePickerState = rememberDatePickerState(
             initialSelectedDateMillis = System.currentTimeMillis()
@@ -67,9 +69,10 @@ fun AddTransactionScreen(
 
         LaunchedEffect(datePickerState.selectedDateMillis) {
             datePickerState.selectedDateMillis?.let { millis ->
-                val selectedDate = convertMillisToDate(millis)
-                onDateChange(selectedDate) // informs ViewModel
-                showDatePicker = false     // closes the popup
+                val date = Instant.ofEpochMilli(millis)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
+                onDateChange(date)
             }
         }
 
@@ -101,7 +104,8 @@ fun AddTransactionScreen(
                 },
                 modifier = Modifier
                     .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                enabled = !uiState.isSubmitting
             )
 
             ExposedDropdownMenu(
@@ -133,7 +137,7 @@ fun AddTransactionScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = uiState.date,
+                value = uiState.date.toString(),
                 onValueChange = { },
                 label = { Text("Date of transaction") },
                 readOnly = true,
@@ -147,7 +151,8 @@ fun AddTransactionScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(64.dp)
+                    .height(64.dp),
+                enabled = !uiState.isSubmitting
             )
 
             if (showDatePicker) {
