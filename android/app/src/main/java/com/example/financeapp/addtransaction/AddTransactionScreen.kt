@@ -84,7 +84,7 @@ fun AddTransactionScreen(
         OutlinedTextField(
             value = uiState.amount,
             onValueChange = onAmountChange,
-            label = { Text("Amount") },
+            label = { Text("Amount (£)") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             enabled = !uiState.isSubmitting
