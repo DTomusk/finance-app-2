@@ -7,6 +7,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.financeapp.addtransaction.AddTransactionRoute
+import com.example.financeapp.transactionhistory.TransactionHistoryRoute
+import com.example.financeapp.ui.navigation.Destination
 
 @Composable
 fun AppNavHost(
@@ -16,13 +18,16 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "add",
+        startDestination = Destination.AddTransaction.route,
         modifier = modifier
     ) {
-        composable("add") {
+        composable(Destination.AddTransaction.route) {
             AddTransactionRoute(
                 snackbarHostState = snackbarHostState
             )
+        }
+        composable(Destination.TransactionHistory.route) {
+            TransactionHistoryRoute()
         }
     }
 }
