@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.financeapp.addtransaction.AddTransactionRoute
+import com.example.financeapp.categorysettings.CategorySettingsRoute
 import com.example.financeapp.transactionhistory.TransactionHistoryRoute
 import com.example.financeapp.ui.navigation.Destination
 
@@ -28,6 +29,10 @@ fun AppNavHost(
         }
         composable(Destination.TransactionHistory.route) {
             TransactionHistoryRoute()
+        }
+
+        composable(Destination.CategorySettings.route) {
+            CategorySettingsRoute()
         }
     }
 }

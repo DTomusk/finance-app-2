@@ -3,6 +3,7 @@ package com.example.financeapp.ui.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Destination (
@@ -21,9 +22,16 @@ sealed class Destination (
         label = "Transaction History",
         icon = Icons.Default.History
     )
+
+    object CategorySettings : Destination(
+        route = "category_settings",
+        label = "Category Settings",
+        icon = Icons.Default.Settings
+    )
 }
 
 val bottomNavDestinations = listOf(
     Destination.AddTransaction,
-    Destination.TransactionHistory
+    Destination.TransactionHistory,
+    Destination.CategorySettings
 )
