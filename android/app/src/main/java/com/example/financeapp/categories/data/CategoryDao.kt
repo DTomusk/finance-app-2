@@ -3,6 +3,7 @@ package com.example.financeapp.categories.data
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -14,4 +15,10 @@ interface CategoryDao {
 
     @Insert
     suspend fun insertAll(categories: List<CategoryEntity>)
+
+    @Insert
+    suspend fun insert(category: CategoryEntity)
+
+    @Update
+    suspend fun update(category: CategoryEntity)
 }
