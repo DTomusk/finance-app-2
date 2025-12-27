@@ -37,7 +37,11 @@ fun AppScaffold(
                     )
                 }
                 else -> {
-                    AppTopBar()
+                    AppTopBar(
+                        onSettingsClick = {
+                            navController.navigate(Destination.CategorySettings.route)
+                        }
+                    )
                 }
             }
          },

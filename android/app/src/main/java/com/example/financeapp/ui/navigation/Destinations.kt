@@ -40,6 +40,5 @@ sealed class Destination (
 
 val bottomNavDestinations = listOf(
     Destination.AddTransaction,
-    Destination.TransactionHistory,
-    Destination.CategorySettings
+    Destination.TransactionHistory
 )
