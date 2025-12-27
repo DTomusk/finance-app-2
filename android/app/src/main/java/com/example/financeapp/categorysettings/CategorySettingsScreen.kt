@@ -20,13 +20,6 @@ import com.example.financeapp.categorysettings.model.CategoryDialogState
 import com.example.financeapp.categorysettings.ui.CategoryEditCard
 import com.example.financeapp.categorysettings.ui.CategoryEditDialog
 
-// want a screen that shows an item for each category
-// you can add categories
-// you can change a category name (label)
-
-// so the viewmodel will have to get existing categories and be able to add categories
-// I imagine we might want a modal view to add a new category
-// We can have a lazy column as the root of the screen like the transaction screen
 @Composable
 fun CategorySettingsScreen(
     uiState: CategorySettingsUiState,
@@ -40,7 +33,7 @@ fun CategorySettingsScreen(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        verticalArrangement = Arrangement.spacedBy(1.dp)
     ) {
         item {
             Text("Category settings", style = MaterialTheme.typography.titleLarge)
@@ -95,7 +88,13 @@ fun CategorySettingsScreen(
 @Composable
 fun CategorySettingsScreenPreview() {
     CategorySettingsScreen(
-        uiState = CategorySettingsUiState(),
+        uiState = CategorySettingsUiState(
+            categories = listOf(
+                Category(1, "Groceries"),
+                Category(2, "Work"),
+                Category(3, "Fun")
+            )
+        ),
         onAddClick = {},
         onEditClick = {},
         onDialogTextChange = {},

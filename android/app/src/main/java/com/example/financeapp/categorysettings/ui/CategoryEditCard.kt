@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.financeapp.categories.domain.Category
 
-// Question: are we fine to use the domain or do we want to define a uiModel?
+// TODO: Question: are we fine to use the domain or do we want to define a uiModel?
 // We don't need/want to expose the id to the user
 @Composable
 fun CategoryEditCard(
@@ -27,7 +27,6 @@ fun CategoryEditCard(
     Card(
         onClick = { onEdit(model) },
         modifier = Modifier
-            .padding(vertical = 2.dp)
             .fillMaxWidth(),
         shape = RoundedCornerShape(12.dp)
     ) {
