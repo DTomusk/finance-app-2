@@ -2,10 +2,10 @@ package com.example.financeapp.core.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.financeapp.categories.data.CategoryDao
-import com.example.financeapp.transactions.data.TransactionDao
-import com.example.financeapp.categories.data.CategoryEntity
-import com.example.financeapp.transactions.data.TransactionEntity
+import com.example.financeapp.domain.categories.data.CategoryDao
+import com.example.financeapp.domain.transactions.data.TransactionDao
+import com.example.financeapp.domain.categories.data.CategoryEntity
+import com.example.financeapp.domain.transactions.data.TransactionEntity
 
 @Database(
     entities = [

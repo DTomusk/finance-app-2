@@ -1,6 +1,6 @@
 package com.example.financeapp.core.database.seeds
 
-import com.example.financeapp.categories.data.CategoryEntity
+import com.example.financeapp.domain.categories.data.CategoryEntity
 
 object DefaultCategories {
     val categories = listOf(
