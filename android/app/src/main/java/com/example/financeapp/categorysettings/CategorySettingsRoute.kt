@@ -12,6 +12,11 @@ fun CategorySettingsRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     CategorySettingsScreen(
-        uiState = uiState
+        uiState = uiState,
+        onAddClick = viewModel::onAddCategory,
+        onEditClick = viewModel::onEditCategory,
+        onDialogTextChange = viewModel::onDialogTextChange,
+        onDialogDismiss = viewModel::onDialogDismissed,
+        onDialogSubmit = viewModel::onDialogSubmit
     )
 }

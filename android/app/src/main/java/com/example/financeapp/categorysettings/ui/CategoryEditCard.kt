@@ -21,9 +21,11 @@ import com.example.financeapp.categories.domain.Category
 // We don't need/want to expose the id to the user
 @Composable
 fun CategoryEditCard(
-    model: Category
+    model: Category,
+    onEdit: (Category) -> Unit = {}
 ) {
     Card(
+        onClick = { onEdit(model) },
         modifier = Modifier
             .padding(vertical = 2.dp)
             .fillMaxWidth(),

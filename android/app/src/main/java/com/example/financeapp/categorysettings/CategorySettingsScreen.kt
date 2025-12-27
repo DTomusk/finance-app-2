@@ -15,7 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.financeapp.categories.domain.Category
+import com.example.financeapp.categorysettings.model.CategoryDialogState
 import com.example.financeapp.categorysettings.ui.CategoryEditCard
+import com.example.financeapp.categorysettings.ui.CategoryEditDialog
 
 // want a screen that shows an item for each category
 // you can add categories
@@ -26,7 +29,12 @@ import com.example.financeapp.categorysettings.ui.CategoryEditCard
 // We can have a lazy column as the root of the screen like the transaction screen
 @Composable
 fun CategorySettingsScreen(
-    uiState: CategorySettingsUiState
+    uiState: CategorySettingsUiState,
+    onAddClick: () -> Unit,
+    onEditClick: (Category) -> Unit,
+    onDialogTextChange: (String) -> Unit,
+    onDialogDismiss: () -> Unit,
+    onDialogSubmit: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -45,12 +53,12 @@ fun CategorySettingsScreen(
             }
         }
         items(items = uiState.categories) { c ->
-            CategoryEditCard(c)
+            CategoryEditCard(c, onEditClick)
         }
 
         item {
             Button(
-                onClick = { /*TODO*/ },
+                onClick = onAddClick,
                 modifier = Modifier
                     .padding(vertical = 8.dp)
                     .fillMaxWidth()
@@ -59,12 +67,39 @@ fun CategorySettingsScreen(
             }
         }
     }
+
+    when (uiState.dialogState) {
+        is CategoryDialogState.Add -> {
+            CategoryEditDialog(
+                title = "Add category",
+                text = uiState.dialogText,
+                onTextChange = onDialogTextChange,
+                onDismiss = onDialogDismiss,
+                onSubmit = onDialogSubmit
+            )
+        }
+        is CategoryDialogState.Edit -> {
+            CategoryEditDialog(
+                title = "Edit category",
+                text = uiState.dialogText,
+                onTextChange = onDialogTextChange,
+                onDismiss = onDialogDismiss,
+                onSubmit = onDialogSubmit
+            )
+        }
+        CategoryDialogState.None -> Unit
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun CategorySettingsScreenPreview() {
     CategorySettingsScreen(
-        uiState = CategorySettingsUiState()
+        uiState = CategorySettingsUiState(),
+        onAddClick = {},
+        onEditClick = {},
+        onDialogTextChange = {},
+        onDialogDismiss = {},
+        onDialogSubmit = {}
     )
 }
