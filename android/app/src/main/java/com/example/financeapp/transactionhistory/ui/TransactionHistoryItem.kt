@@ -1,4 +1,4 @@
-package com.example.financeapp.transactionhistory
+package com.example.financeapp.transactionhistory.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,6 @@ import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.financeapp.transactionhistory.model.HistoryItemUiModel
 import java.time.Instant
+import java.time.ZoneId
 
 @Composable
 fun TransactionHistoryItem(
@@ -106,7 +106,7 @@ fun TransactionHistoryItemPreview() {
             description = "blah",
             date = Instant
                 .ofEpochMilli(1693596800000)
-                .atZone(java.time.ZoneId.systemDefault())
+                .atZone(ZoneId.systemDefault())
                 .toLocalDate(),
             category = "Groceries"
         )

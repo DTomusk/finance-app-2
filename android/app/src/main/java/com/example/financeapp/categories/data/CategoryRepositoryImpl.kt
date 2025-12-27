@@ -16,10 +16,27 @@ class CategoryRepositoryImpl @Inject constructor(
                     it.toDomain()
             }
         }
+
+    // TODO: we need to make sure that the viewmodel isn't responsible for generating ids
+    // But that the update uses the correct id
+    override suspend fun addCategory(category: Category) {
+        dao.insert(category.toEntity())
+    }
+
+    override suspend fun updateCategory(category: Category) {
+        dao.update(category.toEntity())
+    }
 }
 
 fun CategoryEntity.toDomain(): Category {
     return Category(
+        id = this.id,
+        label = this.label
+    )
+}
+
+fun Category.toEntity(): CategoryEntity {
+    return CategoryEntity(
         id = this.id,
         label = this.label
     )

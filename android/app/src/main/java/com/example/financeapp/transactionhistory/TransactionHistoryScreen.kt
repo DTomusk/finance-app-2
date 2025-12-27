@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.financeapp.transactionhistory.ui.TransactionHistoryItem
 
 @Composable
 fun TransactionHistoryScreen(
@@ -25,7 +26,7 @@ fun TransactionHistoryScreen(
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         item {
-            Text("Total spend this month", style = MaterialTheme.typography.titleSmall)
+            Text("Total spend", style = MaterialTheme.typography.titleSmall)
             Spacer(Modifier.height(8.dp))
 
             Text(
