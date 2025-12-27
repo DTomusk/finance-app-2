@@ -51,7 +51,8 @@ class CategorySettingsViewModel @Inject constructor(
                 dialogState = CategoryDialogState.Edit(
                     category.id,
                     category.label
-                )
+                ),
+                dialogText = category.label
             )
         }
     }
@@ -67,21 +68,22 @@ class CategorySettingsViewModel @Inject constructor(
     fun onDialogDismissed() {
         _uiState.update { state ->
             state.copy(
-                dialogState = CategoryDialogState.None
+                dialogState = CategoryDialogState.None,
+                dialogText = ""
             )
         }
     }
 
     fun onDialogSubmit() {
-        val state = _uiState.value.dialogState
+        val state = _uiState.value
 
         viewModelScope.launch {
-            when (state) {
+            when (state.dialogState) {
                 is CategoryDialogState.Add -> {
-                    categoryRepo.addCategory(Category(label = state.initialText))
+                    categoryRepo.addCategory(Category(label = state.dialogText))
                 }
                 is CategoryDialogState.Edit -> {
-                    categoryRepo.updateCategory(Category(id = state.categoryID, label = state.initialText))
+                    categoryRepo.updateCategory(Category(id = state.dialogState.categoryID, label = state.dialogText))
                 }
                 CategoryDialogState.None -> Unit
             }
