@@ -63,7 +63,6 @@ class AddTransactionViewModel @Inject constructor(
     }
 
     fun submitTransaction() {
-        // Logic to submit transaction can be added here
         viewModelScope.launch {
             _uiState.update { it.copy(isSubmitting = true) }
 
@@ -86,9 +85,13 @@ class AddTransactionViewModel @Inject constructor(
                     date = state.date
                 )
                 transactionRepo.addTransaction(transaction)
-                _uiState . value = _uiState . value . copy (
+                _uiState.value = _uiState.value.copy(
                     isSubmitting = false,
-                successMessage = "Transaction added successfully!"
+                    successMessage = "Transaction added successfully!",
+                    amount = "",
+                    selectedCategoryId = null,
+                    date = LocalDate.now(),
+                    description = ""
                 )
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
