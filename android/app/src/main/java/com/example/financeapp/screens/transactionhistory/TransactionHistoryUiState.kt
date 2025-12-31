@@ -1,8 +1,10 @@
 package com.example.financeapp.screens.transactionhistory
 
+import com.example.financeapp.screens.transactionhistory.model.ConfirmationDialogState
 import com.example.financeapp.screens.transactionhistory.model.HistoryItemUiModel
 
 data class TransactionHistoryUiState(
     val totalSpent: Double = 0.0,
-    val transactions: List<HistoryItemUiModel> = emptyList()
+    val transactions: List<HistoryItemUiModel> = emptyList(),
+    val dialogState: ConfirmationDialogState = ConfirmationDialogState.None
 )

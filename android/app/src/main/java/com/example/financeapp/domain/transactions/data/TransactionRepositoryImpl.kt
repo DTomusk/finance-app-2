@@ -2,6 +2,7 @@ package com.example.financeapp.domain.transactions.data
 
 import com.example.financeapp.domain.transactions.domain.Transaction
 import com.example.financeapp.domain.transactions.domain.TransactionRepository
+import com.example.financeapp.domain.transactions.domain.TransactionWriteModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.Instant
@@ -12,7 +13,7 @@ class TransactionRepositoryImpl @Inject constructor(
     private val dao: TransactionDao
 ) : TransactionRepository {
 
-    override suspend fun addTransaction(transaction: Transaction) {
+    override suspend fun addTransaction(transaction: TransactionWriteModel) {
         dao.insert(transaction.toEntity())
     }
 
@@ -21,9 +22,13 @@ class TransactionRepositoryImpl @Inject constructor(
             .map { entities ->
                 entities.map { it.toDomain() }
             }
+
+    override suspend fun deleteTransaction(transactionID: Long): Int {
+        return dao.deleteById(transactionID)
+    }
 }
 
-fun Transaction.toEntity(): TransactionEntity {
+fun TransactionWriteModel.toEntity(): TransactionEntity {
     val millis = date
         .atStartOfDay(ZoneId.systemDefault())
         .toInstant()
@@ -42,6 +47,7 @@ fun TransactionEntity.toDomain(): Transaction {
         .atZone(ZoneId.systemDefault())
         .toLocalDate()
     return Transaction(
+        id = id,
         amount = amount,
         categoryId = categoryId,
         description = description ?: "",

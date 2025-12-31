@@ -1,6 +1,7 @@
 package com.example.financeapp.screens.transactionhistory.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,10 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,7 +33,8 @@ import java.time.ZoneId
 
 @Composable
 fun TransactionHistoryItem(
-    uiModel: HistoryItemUiModel
+    uiModel: HistoryItemUiModel,
+    onDelete: (Long) -> Unit = {}
 ) {
     val expanded = remember { mutableStateOf(false) }
     Card(
@@ -85,12 +89,28 @@ fun TransactionHistoryItem(
                 }
                 if (expanded.value) {
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        // TODO: handle 0 length description
-                        text = uiModel.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.outline,
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            // TODO: handle 0 length description
+                            text = uiModel.description,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.outline,
+                        )
+
+                        IconButton(
+                            onClick = { onDelete(uiModel.id) },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete",
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -102,6 +122,7 @@ fun TransactionHistoryItem(
 fun TransactionHistoryItemPreview() {
     TransactionHistoryItem(
         uiModel = HistoryItemUiModel(
+            id = 1,
             amount = 100.0,
             description = "blah",
             date = Instant

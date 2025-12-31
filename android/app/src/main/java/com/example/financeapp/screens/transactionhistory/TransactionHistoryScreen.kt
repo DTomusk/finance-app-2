@@ -13,11 +13,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.financeapp.screens.transactionhistory.model.ConfirmationDialogState
+import com.example.financeapp.screens.transactionhistory.ui.ConfirmationDialog
 import com.example.financeapp.screens.transactionhistory.ui.TransactionHistoryItem
 
 @Composable
 fun TransactionHistoryScreen(
-    uiState: TransactionHistoryUiState
+    uiState: TransactionHistoryUiState,
+    onDelete: (Long) -> Unit,
+    onDialogDismiss: () -> Unit,
+    onDialogSubmit: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -42,8 +47,22 @@ fun TransactionHistoryScreen(
         }
 
         items(uiState.transactions) { t ->
-            TransactionHistoryItem(t)
+            TransactionHistoryItem(t, onDelete = {
+                onDelete(t.id)
+            })
         }
+    }
+
+    when (uiState.dialogState) {
+        is ConfirmationDialogState.Confirm -> {
+            ConfirmationDialog(
+                title = "Delete transaction",
+                text = "Are you sure you want to delete this transaction?",
+                onDismiss = onDialogDismiss,
+                onConfirm = onDialogSubmit
+            )
+        }
+        ConfirmationDialogState.None -> Unit
     }
 }
 
@@ -51,6 +70,9 @@ fun TransactionHistoryScreen(
 @Composable
 fun TransactionHistoryScreenPreview() {
     TransactionHistoryScreen(
-        uiState = TransactionHistoryUiState()
+        uiState = TransactionHistoryUiState(),
+        onDelete = {},
+        onDialogDismiss = {},
+        onDialogSubmit = {}
     )
 }

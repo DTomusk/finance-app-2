@@ -6,6 +6,7 @@ import com.example.financeapp.screens.addtransaction.model.CategoryUiModel
 import com.example.financeapp.domain.categories.domain.CategoryRepository
 import com.example.financeapp.domain.transactions.domain.Transaction
 import com.example.financeapp.domain.transactions.domain.TransactionRepository
+import com.example.financeapp.domain.transactions.domain.TransactionWriteModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -78,7 +79,7 @@ class AddTransactionViewModel @Inject constructor(
             }
             try {
                 val state = _uiState.value
-                val transaction = Transaction(
+                val transaction = TransactionWriteModel(
                     amount = state.amount.toDouble(),
                     categoryId = state.selectedCategoryId!!,
                     description = state.description,

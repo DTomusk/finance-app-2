@@ -12,6 +12,9 @@ fun TransactionHistoryRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TransactionHistoryScreen(
-        uiState = uiState
+        uiState = uiState,
+        onDelete = viewModel::confirmDelete,
+        onDialogDismiss = viewModel::onDialogDismissed,
+        onDialogSubmit = viewModel::onDialogSubmit
     )
 }

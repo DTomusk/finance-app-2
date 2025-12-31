@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.financeapp.domain.categories.domain.CategoryRepository
 import com.example.financeapp.screens.transactionhistory.model.HistoryItemUiModel
 import com.example.financeapp.domain.transactions.domain.TransactionRepository
+import com.example.financeapp.screens.transactionhistory.model.ConfirmationDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,6 +39,7 @@ class TransactionHistoryViewModel @Inject constructor(
                     val category = categoryMap[transaction.categoryId]
                         ?.label ?: "Unknown"
                     HistoryItemUiModel(
+                        id = transaction.id,
                         amount = transaction.amount,
                         description = transaction.description
                             .takeIf { it.isNotBlank() } ?: "No description",
@@ -53,6 +55,36 @@ class TransactionHistoryViewModel @Inject constructor(
                         )
                     }
             }
+        }
+    }
+
+    fun confirmDelete(transactionID: Long) {
+        _uiState.update { state ->
+            state.copy(
+                dialogState = ConfirmationDialogState.Confirm(transactionID)
+            )
+        }
+    }
+
+    fun onDialogDismissed() {
+        _uiState.update { state ->
+            state.copy(
+                dialogState = ConfirmationDialogState.None
+            )
+        }
+    }
+
+    fun onDialogSubmit() {
+        val state = _uiState.value
+
+        viewModelScope.launch {
+            when (state.dialogState) {
+                is ConfirmationDialogState.Confirm -> {
+                    transactionRepo.deleteTransaction(state.dialogState.id)
+                }
+                ConfirmationDialogState.None -> Unit
+            }
+            onDialogDismissed()
         }
     }
 }
