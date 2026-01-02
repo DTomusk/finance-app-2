@@ -37,6 +37,7 @@ import java.time.ZoneId
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionForm(
+    modifier: Modifier = Modifier,
     title: String,
     submitLabel: String,
 
@@ -78,7 +79,7 @@ fun TransactionForm(
         categories.firstOrNull { it.id == selectedCategoryId }?.label.orEmpty()
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(title, style = MaterialTheme.typography.headlineSmall)
