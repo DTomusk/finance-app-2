@@ -9,7 +9,5 @@ data class AddTransactionUiState (
     val date: LocalDate = LocalDate.now(),
     val description: String = "",
     val isSubmitting: Boolean = false,
-    val errorMessage: String? = null,
-    val successMessage: String? = null,
     val categories: List<CategoryUiModel> = emptyList()
 )

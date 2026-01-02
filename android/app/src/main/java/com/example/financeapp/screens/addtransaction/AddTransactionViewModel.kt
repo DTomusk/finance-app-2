@@ -8,8 +8,11 @@ import com.example.financeapp.domain.transactions.domain.Transaction
 import com.example.financeapp.domain.transactions.domain.TransactionRepository
 import com.example.financeapp.domain.transactions.domain.TransactionWriteModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,6 +26,10 @@ class AddTransactionViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(AddTransactionUiState())
     val uiState: StateFlow<AddTransactionUiState> = _uiState.asStateFlow()
+
+    private val _events = MutableSharedFlow<UiEvent<String>>()
+    val events: SharedFlow<UiEvent<String>> = _events.asSharedFlow()
+
 
     init {
         observeCategories()
@@ -72,9 +79,9 @@ class AddTransactionViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isSubmitting = false,
-                        errorMessage = validation.exceptionOrNull()?.message
                     )
                 }
+                _events.emit(UiEvent(validation.exceptionOrNull()?.message ?: "Invalid input"))
                 return@launch
             }
             try {
@@ -88,26 +95,19 @@ class AddTransactionViewModel @Inject constructor(
                 transactionRepo.addTransaction(transaction)
                 _uiState.value = _uiState.value.copy(
                     isSubmitting = false,
-                    successMessage = "Transaction added successfully!",
                     amount = "",
                     selectedCategoryId = null,
                     date = LocalDate.now(),
                     description = ""
                 )
+                _events.emit(UiEvent("Transaction added successfully!"))
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isSubmitting = false,
-                    errorMessage = "Failed to add transaction."
                 )
+                _events.emit(UiEvent("Failed to add transaction."))
             }
         }
-    }
-
-    fun clearMessages() {
-        _uiState.value = _uiState.value.copy(
-            errorMessage = null,
-            successMessage = null
-        )
     }
 
     private fun validate(): Result<Unit> {
@@ -126,5 +126,17 @@ class AddTransactionViewModel @Inject constructor(
 
         return Result.success(Unit)
     }
+}
 
+class UiEvent<out T>(private val content: T) {
+    private var hasBeenHandled = false
+
+    fun getContentIfNotHandled(): T? {
+        return if (hasBeenHandled) {
+            null
+        } else {
+            hasBeenHandled = true
+            content
+        }
+    }
 }

@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.financeapp.screens.addtransaction.model.CategoryUiModel
@@ -90,7 +91,10 @@ fun TransactionForm(
             label = { Text("Amount (£)") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
-            enabled = !isSubmitting
+            enabled = !isSubmitting,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal
+            )
         )
 
         ExposedDropdownMenuBox(

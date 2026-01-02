@@ -14,14 +14,11 @@ fun AddTransactionRoute (
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(uiState.successMessage, uiState.errorMessage) {
-        uiState.successMessage?.let {
-            snackbarHostState.showSnackbar(it)
-            viewModel.clearMessages()
-        }
-        uiState.errorMessage?.let {
-            snackbarHostState.showSnackbar(it)
-            viewModel.clearMessages()
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            event.getContentIfNotHandled()?.let { message ->
+                snackbarHostState.showSnackbar(message)
+            }
         }
     }
 
