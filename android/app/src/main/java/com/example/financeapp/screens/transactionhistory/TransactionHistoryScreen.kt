@@ -22,7 +22,8 @@ fun TransactionHistoryScreen(
     uiState: TransactionHistoryUiState,
     onDelete: (Long) -> Unit,
     onDialogDismiss: () -> Unit,
-    onDialogSubmit: () -> Unit
+    onDialogSubmit: () -> Unit,
+    onEdit: (Long) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -47,9 +48,15 @@ fun TransactionHistoryScreen(
         }
 
         items(uiState.transactions) { t ->
-            TransactionHistoryItem(t, onDelete = {
-                onDelete(t.id)
-            })
+            TransactionHistoryItem(
+                t,
+                onDelete = {
+                    onDelete(t.id)
+                },
+                onEdit = {
+                    onEdit(t.id)
+                }
+            )
         }
     }
 
@@ -73,6 +80,7 @@ fun TransactionHistoryScreenPreview() {
         uiState = TransactionHistoryUiState(),
         onDelete = {},
         onDialogDismiss = {},
-        onDialogSubmit = {}
+        onDialogSubmit = {},
+        onEdit = {}
     )
 }

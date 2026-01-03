@@ -24,7 +24,8 @@ import java.time.ZoneId
 @Composable
 fun TransactionHistoryItem(
     uiModel: HistoryItemUiModel,
-    onDelete: (Long) -> Unit = {}
+    onDelete: (Long) -> Unit = {},
+    onEdit: (Long) -> Unit = {}
 ) {
     Card(
         modifier = Modifier
@@ -75,7 +76,7 @@ fun TransactionHistoryItem(
                 )
             }
             OverflowMenu(
-                onEditClick = { },
+                onEditClick = { onEdit(uiModel.id) },
                 onDeleteClick = { onDelete(uiModel.id) }
             )
         }

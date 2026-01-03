@@ -21,6 +21,16 @@ sealed class Destination (
         showTopBar = true
     )
 
+    object EditTransaction : Destination(
+        route = "edit_transaction/{id}",
+        label = "Edit Transaction",
+        icon = Icons.Default.Add,
+        showBottomBar = false,
+        showTopBar = true
+    ) {
+        fun createRoute(id: Long) = "edit_transaction/$id"
+    }
+
     object TransactionHistory : Destination(
         route = "transaction_history",
         label = "Transaction History",
