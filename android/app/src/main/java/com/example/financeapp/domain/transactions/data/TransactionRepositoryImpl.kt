@@ -17,6 +17,10 @@ class TransactionRepositoryImpl @Inject constructor(
         dao.insert(transaction.toEntity())
     }
 
+    override suspend fun updateTransaction(transaction: Transaction) {
+        dao.update(transaction.toEntity())
+    }
+
     override fun observeTransactions(): Flow<List<Transaction>> =
         dao.observeTransactions()
             .map { entities ->
@@ -40,6 +44,21 @@ fun TransactionWriteModel.toEntity(): TransactionEntity {
         .toEpochMilli()
 
     return TransactionEntity(
+        amount = amount,
+        categoryId = categoryId,
+        description = description,
+        dateMillis = millis
+    )
+}
+
+fun Transaction.toEntity(): TransactionEntity {
+    val millis = date
+        .atStartOfDay(ZoneId.systemDefault())
+        .toInstant()
+        .toEpochMilli()
+
+    return TransactionEntity(
+        id = id,
         amount = amount,
         categoryId = categoryId,
         description = description,

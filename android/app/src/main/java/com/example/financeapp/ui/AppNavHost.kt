@@ -42,7 +42,10 @@ fun AppNavHost(
             val id = backStackEntry.arguments?.getLong("id")
                 ?: error("id parameter not found")
 
-            EditTransactionRoute(transactionId = id)
+            EditTransactionRoute(
+                transactionId = id,
+                snackbarHostState = snackbarHostState
+            )
         }
 
         composable(Destination.TransactionHistory.route) {

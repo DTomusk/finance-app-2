@@ -1,5 +1,6 @@
 package com.example.financeapp.screens.edittransaction
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -9,12 +10,21 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 @Composable
 fun EditTransactionRoute(
     transactionId: Long,
-    viewModel: EditTransactionViewModel = hiltViewModel()
+    viewModel: EditTransactionViewModel = hiltViewModel(),
+    snackbarHostState: SnackbarHostState
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(transactionId) {
         viewModel.loadTransaction(transactionId)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            event.getContentIfNotHandled()?.let { message ->
+                snackbarHostState.showSnackbar(message)
+            }
+        }
     }
 
     EditTransactionScreen(
