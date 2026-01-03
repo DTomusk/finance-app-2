@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.financeapp.screens.addtransaction.model.CategoryUiModel
 import com.example.financeapp.domain.categories.domain.CategoryRepository
-import com.example.financeapp.domain.transactions.domain.Transaction
 import com.example.financeapp.domain.transactions.domain.TransactionRepository
 import com.example.financeapp.domain.transactions.domain.TransactionWriteModel
 import dagger.hilt.android.lifecycle.HiltViewModel

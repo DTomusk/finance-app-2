@@ -33,8 +33,16 @@ fun AppNavHost(
 
         composable(
             route = Destination.EditTransaction.route,
-            arguments = listOf(navArgument("id") { type = LongType })) {
-            EditTransactionRoute()
+            arguments = listOf(
+                navArgument("id") { type = LongType }
+            )
+        ) {
+            backStackEntry ->
+
+            val id = backStackEntry.arguments?.getLong("id")
+                ?: error("id parameter not found")
+
+            EditTransactionRoute(transactionId = id)
         }
 
         composable(Destination.TransactionHistory.route) {

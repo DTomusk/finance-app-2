@@ -23,6 +23,11 @@ class TransactionRepositoryImpl @Inject constructor(
                 entities.map { it.toDomain() }
             }
 
+    override suspend fun getTransaction(id: Long): Transaction? {
+        return dao.getById(id)?.toDomain()
+    }
+
+
     override suspend fun deleteTransaction(transactionID: Long): Int {
         return dao.deleteById(transactionID)
     }
