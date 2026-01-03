@@ -1,11 +1,13 @@
-package com.example.financeapp.screens.addtransaction
+package com.example.financeapp.screens.edittransaction
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.financeapp.screens.addtransaction.model.CategoryUiModel
 import com.example.financeapp.domain.categories.domain.CategoryRepository
+import com.example.financeapp.domain.transactions.domain.Transaction
 import com.example.financeapp.domain.transactions.domain.TransactionRepository
 import com.example.financeapp.domain.transactions.domain.TransactionWriteModel
+import com.example.financeapp.screens.addtransaction.UiEvent
+import com.example.financeapp.screens.addtransaction.model.CategoryUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,12 +21,12 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class AddTransactionViewModel @Inject constructor(
+class EditTransactionViewModel @Inject constructor(
     private val transactionRepo: TransactionRepository,
     private val categoryRepo: CategoryRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(AddTransactionUiState())
-    val uiState: StateFlow<AddTransactionUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(EditTransactionUiState())
+    val uiState: StateFlow<EditTransactionUiState> = _uiState.asStateFlow()
 
     private val _events = MutableSharedFlow<UiEvent<String>>()
     val events: SharedFlow<UiEvent<String>> = _events.asSharedFlow()
@@ -52,6 +54,22 @@ class AddTransactionViewModel @Inject constructor(
         }
     }
 
+    fun loadTransaction(id: Long) {
+        viewModelScope.launch {
+            val transaction = transactionRepo.getTransaction(id)
+                ?: return@launch
+
+            _uiState.update { state ->
+                state.copy(
+                    id = transaction.id,
+                    amount = transaction.amount.toString(),
+                    selectedCategoryId = transaction.categoryId,
+                    date = transaction.date,
+                    description = transaction.description
+                )
+            }
+        }
+    }
 
     fun onAmountChange(newAmount: String) {
         _uiState.value = _uiState.value.copy(amount = newAmount)
@@ -69,7 +87,7 @@ class AddTransactionViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(description = newDescription)
     }
 
-    fun submitTransaction() {
+    fun onSubmit() {
         viewModelScope.launch {
             _uiState.update { it.copy(isSubmitting = true) }
 
@@ -85,26 +103,23 @@ class AddTransactionViewModel @Inject constructor(
             }
             try {
                 val state = _uiState.value
-                val transaction = TransactionWriteModel(
+                val transaction = Transaction(
+                    id = state.id,
                     amount = state.amount.toDouble(),
                     categoryId = state.selectedCategoryId!!,
                     description = state.description,
                     date = state.date
                 )
-                transactionRepo.addTransaction(transaction)
+                transactionRepo.updateTransaction(transaction)
                 _uiState.value = _uiState.value.copy(
                     isSubmitting = false,
-                    amount = "",
-                    selectedCategoryId = null,
-                    date = LocalDate.now(),
-                    description = ""
                 )
-                _events.emit(UiEvent("Transaction added successfully!"))
+                _events.emit(UiEvent("Transaction updated successfully!"))
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isSubmitting = false,
                 )
-                _events.emit(UiEvent("Failed to add transaction."))
+                _events.emit(UiEvent("Failed to update transaction."))
             }
         }
     }
@@ -124,18 +139,5 @@ class AddTransactionViewModel @Inject constructor(
         }
 
         return Result.success(Unit)
-    }
-}
-
-class UiEvent<out T>(private val content: T) {
-    private var hasBeenHandled = false
-
-    fun getContentIfNotHandled(): T? {
-        return if (hasBeenHandled) {
-            null
-        } else {
-            hasBeenHandled = true
-            content
-        }
     }
 }
