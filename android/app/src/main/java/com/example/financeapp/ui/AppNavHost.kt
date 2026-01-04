@@ -4,15 +4,12 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType.Companion.LongType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import com.example.financeapp.features.transactions.add.AddTransactionRoute
 import com.example.financeapp.features.settings.categories.CategorySettingsRoute
-import com.example.financeapp.features.transactions.edit.EditTransactionRoute
-import com.example.financeapp.features.transactions.history.TransactionHistoryRoute
-import com.example.financeapp.ui.navigation.Destination
+import com.example.financeapp.features.transactions.navigation.AddTransactionRoute
+import com.example.financeapp.features.transactions.navigation.transactionNavGraph
+import com.example.financeapp.ui.navigation.AppDestination
 
 @Composable
 fun AppNavHost(
@@ -22,37 +19,15 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Destination.AddTransaction.route,
+        startDestination = AddTransactionRoute.route,
         modifier = modifier
     ) {
-        composable(Destination.AddTransaction.route) {
-            AddTransactionRoute(
-                snackbarHostState = snackbarHostState
-            )
-        }
+        transactionNavGraph(
+            navController = navController,
+            snackbarHostState = snackbarHostState
+        )
 
-        composable(
-            route = Destination.EditTransaction.route,
-            arguments = listOf(
-                navArgument("id") { type = LongType }
-            )
-        ) {
-            backStackEntry ->
-
-            val id = backStackEntry.arguments?.getLong("id")
-                ?: error("id parameter not found")
-
-            EditTransactionRoute(
-                transactionId = id,
-                snackbarHostState = snackbarHostState
-            )
-        }
-
-        composable(Destination.TransactionHistory.route) {
-            TransactionHistoryRoute(navController = navController)
-        }
-
-        composable(Destination.CategorySettings.route) {
+        composable(AppDestination.CategorySettings.route) {
             CategorySettingsRoute()
         }
     }

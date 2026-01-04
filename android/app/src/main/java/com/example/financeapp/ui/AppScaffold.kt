@@ -6,69 +6,42 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.financeapp.ui.components.AppBottomBar
 import com.example.financeapp.ui.components.AppTopBar
 import com.example.financeapp.ui.components.BackTopBar
-import com.example.financeapp.ui.navigation.Destination
+import com.example.financeapp.ui.navigation.AppDestination
+import com.example.financeapp.ui.navigation.TopBarType
+import com.example.financeapp.ui.navigation.toDestination
 
 @Composable
 fun AppScaffold(
     navController: NavHostController,
     snackbarHostState: SnackbarHostState
 ) {
-    val backStackEntry = navController.currentBackStackEntryAsState()
-    val currentDestination = backStackEntry.value?.destination
-
-    val destination = when {
-        currentDestination?.hierarchy?.any {
-            it.route == Destination.AddTransaction.route
-        } == true -> Destination.AddTransaction
-
-        currentDestination?.hierarchy?.any {
-            it.route == Destination.TransactionHistory.route
-        } == true -> Destination.TransactionHistory
-
-        currentDestination?.hierarchy?.any {
-            it.route == Destination.CategorySettings.route
-        } == true -> Destination.CategorySettings
-
-        currentDestination?.hierarchy?.any {
-            it.route == Destination.EditTransaction.route
-        } == true -> Destination.EditTransaction
-
-        else -> null
-    }
-
+    val currentDestination =
+        navController.currentBackStackEntryAsState()
+            .value?.destination
+            ?.toDestination()
 
     Scaffold(
         topBar = {
-            when (destination) {
-                Destination.CategorySettings -> {
-                    BackTopBar(
-                        title = "Settings",
-                        onBackClick = { navController.popBackStack() }
-                    )
-                }
-                Destination.EditTransaction -> {
-                    BackTopBar(
-                        title = "",
-                        onBackClick = { navController.popBackStack() }
-                    )
-                }
-                else -> {
-                    AppTopBar(
-                        onSettingsClick = {
-                            navController.navigate(Destination.CategorySettings.route)
-                        }
-                    )
-                }
+            when (val bar = currentDestination?.topBarType) {
+                TopBarType.Default -> AppTopBar(
+                    onSettingsClick = {
+                        navController.navigate(AppDestination.CategorySettings.route)
+                    }
+                )
+                is TopBarType.Back -> BackTopBar(
+                    title = bar.title,
+                    onBackClick = { navController.popBackStack() }
+                )
+                null -> {}
             }
-         },
+        },
         bottomBar = {
-            if (destination?.showBottomBar == true) {
+            if (currentDestination?.showBottomBar == true) {
                 AppBottomBar(navController)
             }
         },

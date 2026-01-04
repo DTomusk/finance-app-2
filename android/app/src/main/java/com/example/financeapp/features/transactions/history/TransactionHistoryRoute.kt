@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.example.financeapp.ui.navigation.Destination
+import com.example.financeapp.features.transactions.navigation.TransactionRoutes
 
 @Composable
 fun TransactionHistoryRoute(
@@ -21,7 +21,7 @@ fun TransactionHistoryRoute(
         onDialogSubmit = viewModel::onDialogSubmit,
         onEdit = { id ->
             navController.navigate(
-                Destination.EditTransaction.createRoute(id)
+                TransactionRoutes.edit(id)
             )
         }
     )
