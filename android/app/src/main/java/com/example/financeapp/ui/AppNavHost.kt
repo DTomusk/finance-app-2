@@ -8,10 +8,10 @@ import androidx.navigation.NavType.Companion.LongType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.financeapp.screens.addtransaction.AddTransactionRoute
-import com.example.financeapp.screens.categorysettings.CategorySettingsRoute
-import com.example.financeapp.screens.edittransaction.EditTransactionRoute
-import com.example.financeapp.screens.transactionhistory.TransactionHistoryRoute
+import com.example.financeapp.features.transactions.add.AddTransactionRoute
+import com.example.financeapp.features.settings.categories.CategorySettingsRoute
+import com.example.financeapp.features.transactions.edit.EditTransactionRoute
+import com.example.financeapp.features.transactions.history.TransactionHistoryRoute
 import com.example.financeapp.ui.navigation.Destination
 
 @Composable
