@@ -1,0 +1,142 @@
+package com.example.financeapp.features.transactions.edit
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.financeapp.domain.categories.domain.CategoryRepository
+import com.example.financeapp.domain.transactions.domain.Transaction
+import com.example.financeapp.domain.transactions.domain.TransactionRepository
+import com.example.financeapp.features.transactions.add.UiEvent
+import com.example.financeapp.features.transactions.add.model.CategoryUiModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import javax.inject.Inject
+
+@HiltViewModel
+class EditTransactionViewModel @Inject constructor(
+    private val transactionRepo: TransactionRepository,
+    private val categoryRepo: CategoryRepository
+) : ViewModel() {
+    private val _uiState = MutableStateFlow(EditTransactionUiState())
+    val uiState: StateFlow<EditTransactionUiState> = _uiState.asStateFlow()
+
+    private val _events = MutableSharedFlow<UiEvent<String>>()
+    val events: SharedFlow<UiEvent<String>> = _events.asSharedFlow()
+
+
+    init {
+        observeCategories()
+    }
+
+    private fun observeCategories() {
+        viewModelScope.launch {
+            categoryRepo.observeCategories()
+                .collect { categories ->
+                    _uiState.update { state ->
+                        state.copy(
+                            categories = categories.map {
+                                CategoryUiModel(
+                                    id = it.id,
+                                    label = it.label
+                                )
+                            }
+                        )
+                    }
+                }
+        }
+    }
+
+    fun loadTransaction(id: Long) {
+        viewModelScope.launch {
+            val transaction = transactionRepo.getTransaction(id)
+                ?: return@launch
+
+            _uiState.update { state ->
+                state.copy(
+                    id = transaction.id,
+                    amount = transaction.amount.toString(),
+                    selectedCategoryId = transaction.categoryId,
+                    date = transaction.date,
+                    description = transaction.description
+                )
+            }
+        }
+    }
+
+    fun onAmountChange(newAmount: String) {
+        _uiState.value = _uiState.value.copy(amount = newAmount)
+    }
+
+    fun onCategoryChange(newCategoryId: Long) {
+        _uiState.value = _uiState.value.copy(selectedCategoryId = newCategoryId)
+    }
+
+    fun onDateChange(newDate: LocalDate) {
+        _uiState.value = _uiState.value.copy(date = newDate)
+    }
+
+    fun onDescriptionChange(newDescription: String) {
+        _uiState.value = _uiState.value.copy(description = newDescription)
+    }
+
+    fun onSubmit() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isSubmitting = true) }
+
+            val validation = validate()
+            if (validation.isFailure) {
+                _uiState.update {
+                    it.copy(
+                        isSubmitting = false,
+                    )
+                }
+                _events.emit(UiEvent(validation.exceptionOrNull()?.message ?: "Invalid input"))
+                return@launch
+            }
+            try {
+                val state = _uiState.value
+                val transaction = Transaction(
+                    id = state.id,
+                    amount = state.amount.toDouble(),
+                    categoryId = state.selectedCategoryId!!,
+                    description = state.description,
+                    date = state.date
+                )
+                transactionRepo.updateTransaction(transaction)
+                _uiState.value = _uiState.value.copy(
+                    isSubmitting = false,
+                )
+                _events.emit(UiEvent("Transaction updated successfully!"))
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isSubmitting = false,
+                )
+                _events.emit(UiEvent("Failed to update transaction."))
+            }
+        }
+    }
+
+    private fun validate(): Result<Unit> {
+        val state = _uiState.value
+
+        val amount = state.amount.toDoubleOrNull()
+            ?: return Result.failure(IllegalArgumentException("Invalid amount"))
+
+        if (amount <= 0) {
+            return Result.failure(IllegalArgumentException("Amount must be greater than zero"))
+        }
+
+        if (state.selectedCategoryId == null) {
+            return Result.failure(IllegalArgumentException("Category is required"))
+        }
+
+        return Result.success(Unit)
+    }
+}
