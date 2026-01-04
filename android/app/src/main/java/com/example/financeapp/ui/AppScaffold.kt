@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.financeapp.features.settings.navigation.SettingsRoute
 import com.example.financeapp.ui.components.AppBottomBar
 import com.example.financeapp.ui.components.AppTopBar
 import com.example.financeapp.ui.components.BackTopBar
@@ -30,7 +31,7 @@ fun AppScaffold(
             when (val bar = currentDestination?.topBarType) {
                 TopBarType.Default -> AppTopBar(
                     onSettingsClick = {
-                        navController.navigate(AppDestination.CategorySettings.route)
+                        navController.navigate(SettingsRoute.route)
                     }
                 )
                 is TopBarType.Back -> BackTopBar(

@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.financeapp.features.settings.categories.CategorySettingsRoute
+import com.example.financeapp.features.settings.navigation.settingsNavGraph
 import com.example.financeapp.features.transactions.navigation.AddTransactionRoute
 import com.example.financeapp.features.transactions.navigation.transactionNavGraph
 import com.example.financeapp.ui.navigation.AppDestination
@@ -27,8 +28,6 @@ fun AppNavHost(
             snackbarHostState = snackbarHostState
         )
 
-        composable(AppDestination.CategorySettings.route) {
-            CategorySettingsRoute()
-        }
+        settingsNavGraph()
     }
 }

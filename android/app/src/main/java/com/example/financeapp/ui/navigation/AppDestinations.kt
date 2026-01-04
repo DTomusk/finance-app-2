@@ -14,15 +14,7 @@ open class AppDestination (
     val icon: ImageVector,
     val showBottomBar: Boolean,
     val topBarType: TopBarType
-) {
-    object CategorySettings : AppDestination(
-        route = "category_settings",
-        label = "Category Settings",
-        icon = Icons.Default.Settings,
-        showBottomBar = false,
-        topBarType = TopBarType.Back("Category Settings")
-    )
-}
+)
 
 val bottomNavDestinations = listOf(
     AddTransactionRoute,
