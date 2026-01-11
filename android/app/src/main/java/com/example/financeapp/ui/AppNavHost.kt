@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.financeapp.features.analytics.navigation.analyticsNavGraph
 import com.example.financeapp.features.settings.categories.CategorySettingsRoute
 import com.example.financeapp.features.settings.navigation.settingsNavGraph
 import com.example.financeapp.features.transactions.navigation.AddTransactionRoute
@@ -29,5 +30,7 @@ fun AppNavHost(
         )
 
         settingsNavGraph()
+
+        analyticsNavGraph()
     }
 }

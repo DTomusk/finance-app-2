@@ -25,6 +25,7 @@ fun AnalyticsScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         AverageDailyExpenses(
+            totalSpend = uiState.totalSpend,
             averageDailyExpenses = uiState.averageDailySpend,
             numberOfDays = uiState.numberOfDays
         )

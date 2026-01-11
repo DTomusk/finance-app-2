@@ -1,5 +1,6 @@
 package com.example.financeapp.ui.navigation
 
+import com.example.financeapp.features.analytics.navigation.AnalyticsRoute
 import com.example.financeapp.features.settings.navigation.SettingsRoute
 import com.example.financeapp.features.transactions.navigation.AddTransactionRoute
 import com.example.financeapp.features.transactions.navigation.EditTransactionRoute
@@ -10,6 +11,7 @@ object DestinationRegistry {
         AddTransactionRoute,
         EditTransactionRoute,
         TransactionHistoryRoute,
-        SettingsRoute
+        SettingsRoute,
+        AnalyticsRoute
     )
 }
