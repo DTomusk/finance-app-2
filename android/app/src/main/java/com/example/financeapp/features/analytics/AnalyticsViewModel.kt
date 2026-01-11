@@ -1,10 +1,14 @@
 package com.example.financeapp.features.analytics
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.financeapp.domain.categories.domain.Category
 import com.example.financeapp.domain.categories.domain.CategoryRepository
 import com.example.financeapp.domain.transactions.domain.Transaction
 import com.example.financeapp.domain.transactions.domain.TransactionRepository
+import com.example.financeapp.features.analytics.model.PieChartData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,11 +40,14 @@ class AnalyticsViewModel @Inject constructor(
                 val totalSpend = calculateTotalSpend(transactions)
                 val numberOfDays = calculateNumberOfDays(transactions)
                 val averageSpend = totalSpend / numberOfDays
+                val pieChartData = calculatePieChartData(transactions, categories)
+
                 AnalyticsUiState(
                     isLoading = false,
                     totalSpend = totalSpend,
                     numberOfDays = numberOfDays,
-                    averageDailySpend = averageSpend
+                    averageDailySpend = averageSpend,
+                    pieChartData = pieChartData
                 )
             }.collect { newState ->
                 _uiState.value = newState
@@ -59,5 +66,24 @@ class AnalyticsViewModel @Inject constructor(
             firstTransactionDate,
             today)
             .toInt() + 1
+    }
+
+    private fun calculatePieChartData(
+        transactions: List<Transaction>,
+        categories: List<Category>
+    ): List<PieChartData> {
+        val categoryMap = categories.associateBy { it.id }
+
+        return transactions
+            .groupBy { it.categoryId }
+            .mapNotNull { (categoryId, transactions) ->
+                val category = categoryMap[categoryId] ?: return@mapNotNull null
+
+                PieChartData(
+                    amount = transactions.sumOf { it.amount },
+                    label = category.label,
+                    color = Color.Blue
+                )
+            }
     }
 }
