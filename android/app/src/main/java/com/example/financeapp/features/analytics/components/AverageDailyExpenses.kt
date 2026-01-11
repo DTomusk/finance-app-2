@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -17,16 +18,18 @@ fun AverageDailyExpenses(
     averageDailyExpenses: Double,
     numberOfDays: Int) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text("You've spent")
-        Text("£$totalSpend",
-            style = MaterialTheme.typography.headlineMedium)
+        Text("£${String.format("%.2f", totalSpend)}",
+            style = MaterialTheme.typography.headlineLarge)
         Text("over the last $numberOfDays days.")
-        Spacer(modifier = Modifier.height(8.dp))
-        Text("That's an average daily spend of")
-        Text("£$averageDailyExpenses",
-            style = MaterialTheme.typography.headlineMedium)
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("That's an average of")
+        Text("£${String.format("%.2f", averageDailyExpenses)}",
+            style = MaterialTheme.typography.headlineLarge)
+        Text("per day")
     }
 }
 
