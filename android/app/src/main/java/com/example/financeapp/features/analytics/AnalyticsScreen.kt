@@ -31,9 +31,12 @@ fun AnalyticsScreen(
             averageDailyExpenses = uiState.averageDailySpend,
             numberOfDays = uiState.numberOfDays
         )
-        TopCategories()
         CategoryPieChart(
+            total = uiState.totalSpend,
             data = uiState.pieChartData
+        )
+        TopCategories(
+            data = uiState.categorySummary
         )
     }
 }
@@ -44,10 +47,10 @@ fun PreviewAnalyticsScreen() {
     AnalyticsScreen(
         uiState = AnalyticsUiState(
             pieChartData = listOf(
-                PieChartData(100.0, "Groceries", Color.Red),
-                PieChartData(200.0, "Restaurants", Color.Blue),
-                PieChartData(300.0, "Transport", Color.Green),
-                PieChartData(100.0, "Groceries", Color.Yellow)
+                PieChartData(100.0, "Groceries"),
+                PieChartData(200.0, "Restaurants"),
+                PieChartData(300.0, "Transport"),
+                PieChartData(100.0, "Groceries")
             )
         )
     )

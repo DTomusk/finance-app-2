@@ -21,9 +21,10 @@ import com.example.financeapp.features.analytics.model.PieChartData
 fun CategoryPieChart(
     modifier: Modifier = Modifier,
     strokeWidth: Dp = 8.dp,
-    data: List<PieChartData>
+    data: List<PieChartData>,
+    total: Double = data.sumOf { it.amount }
 ) {
-    val total = data.sumOf { it.amount }.toFloat()
+    val primaryColor = MaterialTheme.colorScheme.primary
 
     Box(modifier = modifier,
         contentAlignment = Alignment.Center) {
@@ -34,12 +35,13 @@ fun CategoryPieChart(
             )
             var startAngle = -90f
             val gapAngle = 8f
+
             data.forEach { slice ->
-                val sliceAngle: Float = (slice.amount.toFloat() / total) * 360f
+                val sliceAngle: Float = (slice.amount.toFloat() / total.toFloat()) * 360f
                 val sweepAngle: Float = sliceAngle - gapAngle
                 if (sweepAngle > 0f) {
                     drawArc(
-                        color = slice.color,
+                        color = primaryColor,
                         startAngle = startAngle + gapAngle / 2f,
                         sweepAngle = sweepAngle,
                         useCenter = false,
@@ -64,9 +66,9 @@ fun CategoryPieChart(
 fun CategoryPieChartPreview() {
     CategoryPieChart(
         data = listOf(
-            PieChartData(100.0, "Groceries", Color.Red),
-            PieChartData(200.0, "Restaurants", Color.Blue),
-            PieChartData(300.0, "Transport", Color.Green)
+            PieChartData(100.0, "Groceries"),
+            PieChartData(200.0, "Restaurants"),
+            PieChartData(300.0, "Transport")
         )
     )
 }
