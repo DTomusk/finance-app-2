@@ -20,7 +20,7 @@ import com.example.financeapp.features.analytics.model.PieChartData
 @Composable
 fun CategoryPieChart(
     modifier: Modifier = Modifier,
-    strokeWidth: Dp = 8.dp,
+    strokeWidth: Dp = 16.dp,
     data: List<PieChartData>,
     total: Double = data.sumOf { it.amount }
 ) {
@@ -28,7 +28,7 @@ fun CategoryPieChart(
 
     Box(modifier = modifier,
         contentAlignment = Alignment.Center) {
-        Canvas(modifier = Modifier.size(200.dp)) {
+        Canvas(modifier = Modifier.size(300.dp)) {
             val stroke = Stroke(
                 width = strokeWidth.toPx(),
                 cap = StrokeCap.Round

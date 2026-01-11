@@ -2,6 +2,7 @@ package com.example.financeapp.features.analytics.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -18,22 +19,30 @@ fun TopCategories(
     modifier: Modifier = Modifier,
     data: List<CategorySummaryUiModel>
     ) {
-    Card(
-        modifier = modifier,
-        shape = MaterialTheme.shapes.medium
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
     ) {
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        Text(
+            "Category breakdown",
+            style = MaterialTheme.typography.titleLarge
+        )
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        Card(
+            modifier = modifier,
+            shape = MaterialTheme.shapes.medium
         ) {
-            Text(
-                "Category breakdown",
-                style = MaterialTheme.typography.titleMedium
-            )
-            data.forEach { item ->
-                CategorySummaryRow(item)
+            Column(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                data.forEach { item ->
+                    CategorySummaryRow(item)
+                }
             }
         }
     }
