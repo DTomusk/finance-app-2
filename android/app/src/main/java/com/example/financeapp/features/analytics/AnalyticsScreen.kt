@@ -34,11 +34,11 @@ fun AnalyticsScreen(
             style = MaterialTheme.typography.headlineLarge
         )
         CategoryPieChart(
-            data = uiState.chartData,
+            data = uiState.pieChartData,
             total = uiState.totalSpend,
             numberOfDays = uiState.numberOfDays
         )
-        TopCategories(data = uiState.chartData)
+        TopCategories(data = uiState.categoryData)
     }
 }
 
@@ -47,7 +47,7 @@ fun AnalyticsScreen(
 fun PreviewAnalyticsScreen() {
     AnalyticsScreen(
         uiState = AnalyticsUiState(
-            chartData = listOf(
+            categoryData = listOf(
                 ChartData(100.0, "Groceries", 0.5),
                 ChartData(200.0, "Restaurants", 0.3),
                 ChartData(300.0, "Transport", 0.15),

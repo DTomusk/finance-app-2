@@ -45,7 +45,8 @@ class AnalyticsViewModel @Inject constructor(
                     totalSpend = totalSpend,
                     numberOfDays = numberOfDays,
                     averageDailySpend = averageSpend,
-                    chartData = chartData,
+                    categoryData = chartData,
+                    pieChartData = calculatePieChartData(chartData, 0.05, totalSpend)
                 )
             }.collect { newState ->
                 _uiState.value = newState
@@ -86,5 +87,28 @@ class AnalyticsViewModel @Inject constructor(
                     percentage = percentage
                 )
             }.sortedByDescending { it.amount }
+    }
+
+    private fun calculatePieChartData(
+        categoryData: List<ChartData>,
+        otherThreshold: Double,
+        totalSpend: Double
+    ) : List<ChartData> {
+        val sorted = categoryData.sortedByDescending { it.amount }
+
+        val (aboveThreshold, belowThreshold) = sorted.partition { it.percentage >= otherThreshold }
+
+        if (belowThreshold.isEmpty()) {
+            return aboveThreshold
+        }
+
+        val otherTotal = belowThreshold.sumOf { it.amount }
+        val otherPercentage = otherTotal / totalSpend
+
+        return aboveThreshold + ChartData(
+            label = "Other",
+            amount = otherTotal,
+            percentage = otherPercentage
+        )
     }
 }
