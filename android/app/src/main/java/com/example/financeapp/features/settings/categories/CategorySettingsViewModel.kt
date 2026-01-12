@@ -1,10 +1,12 @@
 package com.example.financeapp.features.settings.categories
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.financeapp.domain.categories.domain.Category
 import com.example.financeapp.domain.categories.domain.CategoryRepository
 import com.example.financeapp.features.settings.categories.model.CategoryDialogState
+import com.example.financeapp.features.settings.categories.model.CategoryUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,9 +30,16 @@ class CategorySettingsViewModel @Inject constructor(
         viewModelScope.launch {
             categoryRepo.observeCategories()
                 .collect { categories ->
+                    val uiModels = categories.map { category ->
+                        CategoryUiModel(
+                            id = category.id,
+                            label = category.label,
+                            color = Color.Blue
+                        )
+                    }
                     _uiState.update { state ->
                         state.copy(
-                            categories = categories
+                            categories = uiModels
                         )
                     }
                  }
@@ -45,7 +54,7 @@ class CategorySettingsViewModel @Inject constructor(
         }
     }
 
-    fun onEditCategory(category: Category) {
+    fun onEditCategory(category: CategoryUiModel) {
         _uiState.update { state ->
             state.copy(
                 dialogState = CategoryDialogState.Edit(
@@ -80,10 +89,12 @@ class CategorySettingsViewModel @Inject constructor(
         viewModelScope.launch {
             when (state.dialogState) {
                 is CategoryDialogState.Add -> {
-                    categoryRepo.addCategory(Category(label = state.dialogText))
+                    // TODO: fix color key
+                    categoryRepo.addCategory(Category(label = state.dialogText, colorKey = 0))
                 }
                 is CategoryDialogState.Edit -> {
-                    categoryRepo.updateCategory(Category(id = state.dialogState.categoryID, label = state.dialogText))
+                    // TODO: fix color key
+                    categoryRepo.updateCategory(Category(id = state.dialogState.categoryID, label = state.dialogText, colorKey = 0))
                 }
                 CategoryDialogState.None -> Unit
             }

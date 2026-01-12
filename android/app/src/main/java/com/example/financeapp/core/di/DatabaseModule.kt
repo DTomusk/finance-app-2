@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.financeapp.core.database.AppDatabase
 import com.example.financeapp.core.database.migrations.MIGRATION_1_2
+import com.example.financeapp.core.database.migrations.MIGRATION_2_3
 import com.example.financeapp.core.di.DatabaseCallback
 import dagger.Module
 import dagger.Provides
@@ -36,7 +37,7 @@ object DatabaseModule {
             "app.db"
         )
             .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_2_3)
             .addCallback(callback)
-            // TODO: remove if this doesn't work
             .build()
 }

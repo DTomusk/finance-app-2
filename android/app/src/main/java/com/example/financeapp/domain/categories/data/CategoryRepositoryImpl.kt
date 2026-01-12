@@ -31,13 +31,15 @@ class CategoryRepositoryImpl @Inject constructor(
 fun CategoryEntity.toDomain(): Category {
     return Category(
         id = this.id,
-        label = this.label
+        label = this.label,
+        colorKey = this.colorKey
     )
 }
 
 fun Category.toEntity(): CategoryEntity {
     return CategoryEntity(
         id = this.id,
-        label = this.label
+        label = this.label,
+        colorKey = this.colorKey
     )
 }
