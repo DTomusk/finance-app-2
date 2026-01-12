@@ -1,13 +1,11 @@
 package com.example.financeapp.features.analytics
 
-import com.example.financeapp.features.analytics.model.CategorySummaryUiModel
-import com.example.financeapp.features.analytics.model.PieChartData
+import com.example.financeapp.features.analytics.model.ChartData
 
 data class AnalyticsUiState(
     val isLoading: Boolean = true,
     val totalSpend: Double = 0.0,
     val averageDailySpend: Double = 0.0,
     val numberOfDays: Int = 1,
-    val pieChartData: List<PieChartData> = emptyList(),
-    val categorySummary: List<CategorySummaryUiModel> = emptyList()
+    val chartData: List<ChartData> = emptyList(),
 )

@@ -1,7 +1,7 @@
 package com.example.financeapp.features.analytics.model
 
-data class CategorySummaryUiModel(
-    val categoryLabel: String,
+data class ChartData(
     val amount: Double,
+    val label: String,
     val percentage: Double
 )

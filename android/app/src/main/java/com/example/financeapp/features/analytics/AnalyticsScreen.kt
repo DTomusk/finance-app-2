@@ -6,16 +6,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.financeapp.features.analytics.components.AverageDailyExpenses
 import com.example.financeapp.features.analytics.components.CategoryPieChart
 import com.example.financeapp.features.analytics.components.TopCategories
-import com.example.financeapp.features.analytics.model.CategorySummaryUiModel
-import com.example.financeapp.features.analytics.model.PieChartData
+import com.example.financeapp.features.analytics.model.ChartData
 
 @Composable
 fun AnalyticsScreen(
@@ -25,22 +25,20 @@ fun AnalyticsScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp),
+            .padding(vertical = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
-        AverageDailyExpenses(
-            totalSpend = uiState.totalSpend,
-            averageDailyExpenses = uiState.averageDailySpend,
-            numberOfDays = uiState.numberOfDays
+        Text(
+            "Category breakdown",
+            style = MaterialTheme.typography.headlineLarge
         )
         CategoryPieChart(
+            data = uiState.chartData,
             total = uiState.totalSpend,
-            data = uiState.pieChartData
+            numberOfDays = uiState.numberOfDays
         )
-        TopCategories(
-            data = uiState.categorySummary
-        )
+        TopCategories(data = uiState.chartData)
     }
 }
 
@@ -49,33 +47,11 @@ fun AnalyticsScreen(
 fun PreviewAnalyticsScreen() {
     AnalyticsScreen(
         uiState = AnalyticsUiState(
-            pieChartData = listOf(
-                PieChartData(100.0, "Groceries"),
-                PieChartData(200.0, "Restaurants"),
-                PieChartData(300.0, "Transport"),
-                PieChartData(100.0, "Groceries")
-            ),
-            categorySummary = listOf(
-                CategorySummaryUiModel(
-                    categoryLabel = "Groceries",
-                    amount = 100.0,
-                    percentage = 0.5
-                ),
-                CategorySummaryUiModel(
-                    categoryLabel = "Restaurants",
-                    amount = 50.0,
-                    percentage = 0.25
-                ),
-                CategorySummaryUiModel(
-                    categoryLabel = "Transport",
-                    amount = 30.0,
-                    percentage = 0.15
-                ),
-                CategorySummaryUiModel(
-                    categoryLabel = "Groceries",
-                    amount = 20.0,
-                    percentage = 0.1
-                )
+            chartData = listOf(
+                ChartData(100.0, "Groceries", 0.5),
+                ChartData(200.0, "Restaurants", 0.3),
+                ChartData(300.0, "Transport", 0.15),
+                ChartData(100.0, "Groceries", 0.15)
             )
         )
     )

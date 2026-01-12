@@ -6,8 +6,7 @@ import com.example.financeapp.domain.categories.domain.Category
 import com.example.financeapp.domain.categories.domain.CategoryRepository
 import com.example.financeapp.domain.transactions.domain.Transaction
 import com.example.financeapp.domain.transactions.domain.TransactionRepository
-import com.example.financeapp.features.analytics.model.CategorySummaryUiModel
-import com.example.financeapp.features.analytics.model.PieChartData
+import com.example.financeapp.features.analytics.model.ChartData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,16 +38,14 @@ class AnalyticsViewModel @Inject constructor(
                 val totalSpend = calculateTotalSpend(transactions)
                 val numberOfDays = calculateNumberOfDays(transactions)
                 val averageSpend = totalSpend / numberOfDays
-                val pieChartData = calculatePieChartData(transactions, categories)
-                val categorySummary = calculateCategorySummary(transactions, categories, totalSpend)
+                val chartData = calculateChartData(transactions, categories, totalSpend)
 
                 AnalyticsUiState(
                     isLoading = false,
                     totalSpend = totalSpend,
                     numberOfDays = numberOfDays,
                     averageDailySpend = averageSpend,
-                    pieChartData = pieChartData,
-                    categorySummary = categorySummary
+                    chartData = chartData,
                 )
             }.collect { newState ->
                 _uiState.value = newState
@@ -69,29 +66,11 @@ class AnalyticsViewModel @Inject constructor(
             .toInt() + 1
     }
 
-    private fun calculatePieChartData(
-        transactions: List<Transaction>,
-        categories: List<Category>
-    ): List<PieChartData> {
-        val categoryMap = categories.associateBy { it.id }
-
-        return transactions
-            .groupBy { it.categoryId }
-            .mapNotNull { (categoryId, transactions) ->
-                val category = categoryMap[categoryId] ?: return@mapNotNull null
-
-                PieChartData(
-                    amount = transactions.sumOf { it.amount },
-                    label = category.label
-                )
-            }
-    }
-
-    private fun calculateCategorySummary(
+    private fun calculateChartData(
         transactions: List<Transaction>,
         categories: List<Category>,
         totalSpend: Double
-    ): List<CategorySummaryUiModel> {
+    ): List<ChartData> {
         val categoryMap = categories.associateBy { it.id }
 
         return transactions
@@ -101,8 +80,8 @@ class AnalyticsViewModel @Inject constructor(
                 val amount = transactions.sumOf { it.amount }
                 val percentage = amount / totalSpend
 
-                CategorySummaryUiModel(
-                    categoryLabel = category.label,
+                ChartData(
+                    label = category.label,
                     amount = amount,
                     percentage = percentage
                 )
