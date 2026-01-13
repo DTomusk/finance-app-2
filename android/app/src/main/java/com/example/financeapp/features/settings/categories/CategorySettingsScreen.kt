@@ -13,10 +13,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.financeapp.domain.categories.domain.Category
 import com.example.financeapp.features.settings.categories.model.CategoryDialogState
+import com.example.financeapp.features.settings.categories.model.CategoryUiModel
 import com.example.financeapp.features.settings.categories.ui.CategoryEditCard
 import com.example.financeapp.features.settings.categories.ui.CategoryEditDialog
 
@@ -24,7 +26,7 @@ import com.example.financeapp.features.settings.categories.ui.CategoryEditDialog
 fun CategorySettingsScreen(
     uiState: CategorySettingsUiState,
     onAddClick: () -> Unit,
-    onEditClick: (Category) -> Unit,
+    onEditClick: (CategoryUiModel) -> Unit,
     onDialogTextChange: (String) -> Unit,
     onDialogDismiss: () -> Unit,
     onDialogSubmit: () -> Unit
@@ -90,9 +92,9 @@ fun CategorySettingsScreenPreview() {
     CategorySettingsScreen(
         uiState = CategorySettingsUiState(
             categories = listOf(
-                Category(1, "Groceries"),
-                Category(2, "Work"),
-                Category(3, "Fun")
+                CategoryUiModel(1, "Groceries", Color.Blue),
+                CategoryUiModel(2, "Work", Color.Red),
+                CategoryUiModel(3, "Fun", Color.Green)
             )
         ),
         onAddClick = {},

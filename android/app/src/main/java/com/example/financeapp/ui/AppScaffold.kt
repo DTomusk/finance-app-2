@@ -29,7 +29,8 @@ fun AppScaffold(
     Scaffold(
         topBar = {
             when (val bar = currentDestination?.topBarType) {
-                TopBarType.Default -> AppTopBar(
+                is TopBarType.Default -> AppTopBar(
+                    title = bar.title,
                     onSettingsClick = {
                         navController.navigate(SettingsRoute.route)
                     }
