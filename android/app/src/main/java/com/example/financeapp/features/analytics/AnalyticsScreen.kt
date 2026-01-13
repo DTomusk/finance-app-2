@@ -2,8 +2,9 @@ package com.example.financeapp.features.analytics
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -24,11 +25,11 @@ fun AnalyticsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(vertical = 32.dp),
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
+        Spacer(modifier = Modifier.height(64.dp))
         Text(
             "Category breakdown",
             style = MaterialTheme.typography.headlineLarge
@@ -48,10 +49,16 @@ fun PreviewAnalyticsScreen() {
     AnalyticsScreen(
         uiState = AnalyticsUiState(
             categoryData = listOf(
-                ChartData(100.0, "Groceries", 0.5),
-                ChartData(200.0, "Restaurants", 0.3),
-                ChartData(300.0, "Transport", 0.15),
-                ChartData(100.0, "Groceries", 0.15)
+                ChartData(100.0, "Groceries", 0.5, MaterialTheme.colorScheme.primary),
+                ChartData(200.0, "Restaurants", 0.3, MaterialTheme.colorScheme.secondary),
+                ChartData(300.0, "Transport", 0.15, MaterialTheme.colorScheme.tertiary),
+                ChartData(100.0, "Groceries", 0.15, MaterialTheme.colorScheme.primary),
+            ),
+            pieChartData = listOf(
+                ChartData(100.0, "Groceries", 0.5, MaterialTheme.colorScheme.primary),
+                ChartData(200.0, "Restaurants", 0.3, MaterialTheme.colorScheme.secondary),
+                ChartData(300.0, "Transport", 0.15, MaterialTheme.colorScheme.tertiary),
+                ChartData(100.0, "Groceries", 0.15, MaterialTheme.colorScheme.primary),
             )
         )
     )

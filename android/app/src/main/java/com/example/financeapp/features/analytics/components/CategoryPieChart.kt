@@ -26,8 +26,6 @@ fun CategoryPieChart(
     total: Double = data.sumOf { it.amount },
     numberOfDays: Int = 1
 ) {
-    val primaryColor = MaterialTheme.colorScheme.primary
-
     Box(modifier = modifier,
         contentAlignment = Alignment.Center) {
         Canvas(modifier = Modifier.size(300.dp)) {
@@ -43,7 +41,7 @@ fun CategoryPieChart(
                 val sweepAngle: Float = sliceAngle - gapAngle
                 if (sweepAngle > 0f) {
                     drawArc(
-                        color = primaryColor,
+                        color = slice.color,
                         startAngle = startAngle + gapAngle / 2f,
                         sweepAngle = sweepAngle,
                         useCenter = false,
@@ -69,9 +67,9 @@ fun CategoryPieChart(
 fun CategoryPieChartPreview() {
     CategoryPieChart(
         data = listOf(
-            ChartData(300.0, "Transport", 0.5),
-            ChartData(200.0, "Restaurants", 0.33),
-            ChartData(100.0, "Groceries", 0.17)
+            ChartData(300.0, "Transport", 0.5, MaterialTheme.colorScheme.primary),
+            ChartData(200.0, "Restaurants", 0.33, MaterialTheme.colorScheme.secondary),
+            ChartData(100.0, "Groceries", 0.17, MaterialTheme.colorScheme.tertiary)
         )
     )
 }

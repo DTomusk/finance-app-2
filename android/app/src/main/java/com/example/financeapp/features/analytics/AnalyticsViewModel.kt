@@ -1,5 +1,6 @@
 package com.example.financeapp.features.analytics
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.financeapp.domain.categories.domain.Category
@@ -7,6 +8,7 @@ import com.example.financeapp.domain.categories.domain.CategoryRepository
 import com.example.financeapp.domain.transactions.domain.Transaction
 import com.example.financeapp.domain.transactions.domain.TransactionRepository
 import com.example.financeapp.features.analytics.model.ChartData
+import com.example.financeapp.ui.theme.CategoryColorPalette
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -84,7 +86,8 @@ class AnalyticsViewModel @Inject constructor(
                 ChartData(
                     label = category.label,
                     amount = amount,
-                    percentage = percentage
+                    percentage = percentage,
+                    color = CategoryColorPalette.colorFor(category.colorKey)
                 )
             }.sortedByDescending { it.amount }
     }
@@ -108,7 +111,8 @@ class AnalyticsViewModel @Inject constructor(
         return aboveThreshold + ChartData(
             label = "Other",
             amount = otherTotal,
-            percentage = otherPercentage
+            percentage = otherPercentage,
+            color = Color.Gray
         )
     }
 }

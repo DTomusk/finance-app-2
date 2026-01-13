@@ -20,6 +20,6 @@ val bottomNavDestinations = listOf(
 )
 
 sealed class TopBarType {
-    object Default : TopBarType()
+    data class Default(val title: String) : TopBarType()
     data class Back(val title: String) : TopBarType()
 }

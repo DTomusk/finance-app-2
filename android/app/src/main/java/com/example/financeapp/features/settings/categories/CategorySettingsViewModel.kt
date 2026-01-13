@@ -7,6 +7,7 @@ import com.example.financeapp.domain.categories.domain.Category
 import com.example.financeapp.domain.categories.domain.CategoryRepository
 import com.example.financeapp.features.settings.categories.model.CategoryDialogState
 import com.example.financeapp.features.settings.categories.model.CategoryUiModel
+import com.example.financeapp.ui.theme.CategoryColorPalette
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +35,7 @@ class CategorySettingsViewModel @Inject constructor(
                         CategoryUiModel(
                             id = category.id,
                             label = category.label,
-                            color = Color.Blue
+                            color = CategoryColorPalette.colorFor(category.colorKey)
                         )
                     }
                     _uiState.update { state ->

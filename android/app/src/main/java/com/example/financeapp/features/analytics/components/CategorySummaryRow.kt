@@ -1,9 +1,13 @@
 package com.example.financeapp.features.analytics.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,14 +30,27 @@ fun CategorySummaryRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = item.label,
-                style = MaterialTheme.typography.bodyLarge
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(16.dp)
+                        .background(
+                            color = item.color,
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                )
+                Text(
+                    text = item.label,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -61,7 +78,8 @@ fun PreviewCategorySummaryRow() {
         item = ChartData(
             label = "Groceries",
             amount = 1.0,
-            percentage = 0.5
+            percentage = 0.5,
+            color = MaterialTheme.colorScheme.primary
         )
     )
 }

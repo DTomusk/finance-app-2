@@ -19,7 +19,7 @@ object AddTransactionRoute : AppDestination(
     label = "Add Transaction",
     icon = Icons.Default.Add,
     showBottomBar = true,
-    topBarType = TopBarType.Default
+    topBarType = TopBarType.Default("Add transaction")
 )
 
 object TransactionHistoryRoute : AppDestination(
@@ -27,7 +27,7 @@ object TransactionHistoryRoute : AppDestination(
     label = "Transaction History",
     icon = Icons.Default.History,
     showBottomBar = true,
-    topBarType = TopBarType.Default
+    topBarType = TopBarType.Default("Transaction history")
 )
 
 object EditTransactionRoute : AppDestination(
