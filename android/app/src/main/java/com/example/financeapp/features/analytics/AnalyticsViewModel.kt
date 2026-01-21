@@ -7,6 +7,7 @@ import com.example.financeapp.domain.categories.domain.Category
 import com.example.financeapp.domain.categories.domain.CategoryRepository
 import com.example.financeapp.domain.transactions.domain.Transaction
 import com.example.financeapp.domain.transactions.domain.TransactionRepository
+import com.example.financeapp.features.analytics.domain.TransactionAnalytics.averageExpensePerWeekday
 import com.example.financeapp.features.analytics.model.BarChartData
 import com.example.financeapp.features.analytics.model.ChartData
 import com.example.financeapp.ui.theme.CategoryColorPalette
@@ -119,52 +120,6 @@ class AnalyticsViewModel @Inject constructor(
             percentage = otherPercentage,
             color = Color.Gray
         )
-    }
-
-    private fun averageExpensePerWeekday(
-        transactions: List<Transaction>
-    ): Map<DayOfWeek, Double> {
-        val today = LocalDate.now()
-        val firstTransactionDate = transactions.minByOrNull { it.date }?.date ?: today
-
-        val occurrences = getWeekdayOccurrencesInDateRange(firstTransactionDate, today)
-
-        // totals per day of week
-        val totalExpenses = transactions.groupBy { it.date.dayOfWeek }
-            .mapValues { (_, transactions) ->
-                transactions.sumOf { it.amount }
-            }
-
-        val averageExpenses = mutableMapOf<DayOfWeek, Double>()
-
-        DayOfWeek.entries.forEach { dayOfWeek ->
-            val total = totalExpenses[dayOfWeek] ?: 0.0
-            val count = occurrences[dayOfWeek] ?: 0
-            averageExpenses[dayOfWeek] =
-                if (count == 0) 0.0 else total / count
-        }
-
-        return averageExpenses
-    }
-
-    // TODO: this should be a utility function with tests
-    private fun getWeekdayOccurrencesInDateRange(
-        startDate: LocalDate,
-        endDate: LocalDate
-    ) : Map<DayOfWeek, Int> {
-        // create a sequence of all dates between start and end inclusive
-        val dates = generateSequence(startDate) { date ->
-            if (date <= endDate ) {
-                date.plusDays(1)
-            }
-            else {
-                null
-            }
-        }
-
-        // group by day of week and count each group
-        return dates.groupingBy { it.dayOfWeek }
-            .eachCount()
     }
 
     private fun calculateBarChartData(
