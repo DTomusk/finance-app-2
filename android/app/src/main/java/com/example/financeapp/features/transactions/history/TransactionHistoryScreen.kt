@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.financeapp.core.format.CurrencyFormatter
 import com.example.financeapp.features.transactions.history.model.ConfirmationDialogState
 import com.example.financeapp.features.transactions.history.ui.ConfirmationDialog
 import com.example.financeapp.features.transactions.history.ui.TransactionHistoryItem
@@ -36,7 +37,7 @@ fun TransactionHistoryScreen(
             Spacer(Modifier.height(8.dp))
 
             Text(
-                text = "£${String.format("%.2f", uiState.totalSpent)}",
+                text = CurrencyFormatter.format(uiState.totalSpent),
                 style = MaterialTheme.typography.titleLarge,
                 fontSize = MaterialTheme.typography.titleLarge.fontSize * 1.5f
             )

@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.financeapp.core.format.CurrencyFormatter
 import com.example.financeapp.features.analytics.model.ChartData
 
 @Composable
@@ -57,7 +58,7 @@ fun CategorySummaryRow(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "£${String.format("%.2f", item.amount)}",
+                    text = CurrencyFormatter.format(item.amount),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Medium
                 )

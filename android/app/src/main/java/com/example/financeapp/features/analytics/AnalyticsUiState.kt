@@ -1,5 +1,6 @@
 package com.example.financeapp.features.analytics
 
+import com.example.financeapp.features.analytics.model.BarChartData
 import com.example.financeapp.features.analytics.model.ChartData
 
 data class AnalyticsUiState(
@@ -8,5 +9,6 @@ data class AnalyticsUiState(
     val averageDailySpend: Double = 0.0,
     val numberOfDays: Int = 1,
     val categoryData: List<ChartData> = emptyList(),
-    val pieChartData: List<ChartData> = emptyList()
+    val pieChartData: List<ChartData> = emptyList(),
+    val barChartData: List<BarChartData> = emptyList()
 )

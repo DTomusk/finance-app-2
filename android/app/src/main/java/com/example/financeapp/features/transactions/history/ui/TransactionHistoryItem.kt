@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.financeapp.core.format.CurrencyFormatter
 import com.example.financeapp.features.transactions.history.model.HistoryItemUiModel
 import java.time.Instant
 import java.time.ZoneId
@@ -41,7 +42,7 @@ fun TransactionHistoryItem(
         )
         {
             Text(
-                text = "£${uiModel.amount}",
+                text = CurrencyFormatter.format(uiModel.amount),
                 style = MaterialTheme.typography.titleMedium,
                 fontSize = 20.sp,
                 modifier = Modifier.weight(0.5f)
