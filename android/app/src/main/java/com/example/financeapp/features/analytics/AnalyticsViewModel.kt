@@ -7,6 +7,8 @@ import com.example.financeapp.domain.categories.domain.Category
 import com.example.financeapp.domain.categories.domain.CategoryRepository
 import com.example.financeapp.domain.transactions.domain.Transaction
 import com.example.financeapp.domain.transactions.domain.TransactionRepository
+import com.example.financeapp.features.analytics.domain.TransactionAnalytics.averageExpensePerWeekday
+import com.example.financeapp.features.analytics.model.BarChartData
 import com.example.financeapp.features.analytics.model.ChartData
 import com.example.financeapp.ui.theme.CategoryColorPalette
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,9 +17,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlin.collections.get
+import kotlin.math.absoluteValue
 
 @HiltViewModel
 class AnalyticsViewModel @Inject constructor(
@@ -48,7 +53,8 @@ class AnalyticsViewModel @Inject constructor(
                     numberOfDays = numberOfDays,
                     averageDailySpend = averageSpend,
                     categoryData = chartData,
-                    pieChartData = calculatePieChartData(chartData, 0.05, totalSpend)
+                    pieChartData = calculatePieChartData(chartData, 0.05, totalSpend),
+                    barChartData = calculateBarChartData(transactions)
                 )
             }.collect { newState ->
                 _uiState.value = newState
@@ -115,4 +121,20 @@ class AnalyticsViewModel @Inject constructor(
             color = Color.Gray
         )
     }
+
+    private fun calculateBarChartData(
+        transactions: List<Transaction>
+    ) : List<BarChartData> {
+        val averages = averageExpensePerWeekday(transactions)
+
+        val orderedAverages = DayOfWeek.entries.associateWith { averages[it] ?: 0.0 }
+
+        return orderedAverages.map { (dayOfWeek, average) ->
+            BarChartData(
+                label = dayOfWeek.name.take(3),
+                value = average
+            )
+        }
+    }
 }
+
